@@ -1,0 +1,24 @@
+Gson gson = new Gson();
+        Type listEsp = new TypeToken<List<SpecialitiesModules>>(){}.getType();
+        List<SpecialitiesModules> listEspecialities = gson.fromJson(DaoUtil.getParamConfigById(NAME_CONFIGURATION_PARAM), listEsp);
+        
+
+[
+	{
+		"speciality": "Próximo control por médico general en (días)",
+		"module": "ech_module_23",
+		"question": "231,230,229" 
+	},
+	{
+		"speciality": 1,
+		"module": "ech_module_23",
+		"question": "468,469,470" 
+	},
+	{
+		"speciality": 1,
+		"module": "ech_module_23",
+		"question": "504,506" 
+	}
+]
+
+https://www.adictosaltrabajo.com/2012/09/17/gson-java-json/

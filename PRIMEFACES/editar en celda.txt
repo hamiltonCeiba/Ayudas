@@ -1,0 +1,6 @@
+ <p:column headerText="${msg.package_config_name}" filterBy="#{package.name}" filterMatchMode="contains" filterStyle="background:white;">
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{package.name}" /></f:facet>
+                                <f:facet name="input"><p:inputText  value="#{package.name}" /></f:facet>
+                            </p:cellEditor>
+                        </p:column>

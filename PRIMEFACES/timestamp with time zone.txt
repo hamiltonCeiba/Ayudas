@@ -1,0 +1,40 @@
+en el modelo es tipo Long
+
+    Long time;
+
+    en un insert:
+         stmt.setTimestamp(count++, new java.sql.Timestamp(item.getTime()));
+        stmt.setTimestamp(count++, new Timestamp(his.getExecuteDataPchLong()));
+
+    cuando se recupera:
+         ebcntMedApp.setTime(rs.getTimestamp("time_medical_appoi").getTime());
+
+
+en el modelo si es Date
+
+     Date time;
+
+     para mostrar en la vista :
+         <p:column headerText="${msg.ch_execute_date}" 
+                              sortBy="#{personHistoric.idPchPersonHistoric}" 
+                              class="text-center">
+                        <h:outputText value="#{personHistoric.executeDataPch}" >
+                            <f:convertDateTime pattern="hh:mm a - (dd/MM/YYYY)" />
+                        </h:outputText>
+                    </p:column>
+
+ 
+   para insertarlo para buscar :
+
+       stmt.setDate(count++, new java.sql.Date(dto.getDay().getTime()));
+
+    cuando se recupera 
+         personH.setExecuteDataPch(rs.getTimestamp("execute_data_pch"));
+
+
+
+
+ si un valor es null
+  if (ebcntMedicine.getAdminis_param() == 0) {
+                        stmt.setNull(count++, java.sql.Types.INTEGER);
+                    } 

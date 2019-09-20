@@ -1,0 +1,1 @@
+preparedStatement.setNull(count++, java.sql.Types.INTEGER);

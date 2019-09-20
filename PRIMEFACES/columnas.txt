@@ -1,0 +1,48 @@
+// 2 COLUMNAS
+<div class="row space1">
+                           
+
+                            <div class="col-md-6 paddingRight30">
+                                <div class="row pull-left">
+
+                                </div>
+                                <div class="row">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 paddingLeft30">
+                                <div class="row pull-left">
+
+                                </div>
+                                <div class="row">
+
+                                </div>
+                            </div>
+                       
+
+
+
+
+//1 COLUMNA
+
+                         <div class="row space1">
+                    <div class="col-md-12 ">
+                        <div class="row pull-left">
+                           
+                        </div>
+                        <div class="row">
+                           
+                        </div>
+                    </div>
+                </div>
+
+
+Centrar
+
+  <div class="col-md-8 col-md-offset-2">
+
+  
+
+CENTRAR 
+
+ <div class="form-inline text-center">

@@ -1,0 +1,109 @@
+    private String decideFilterDate(String typeFilter, Timestamp initDate, Timestamp finalDate, String flagCard, boolean isToPerson) {
+        String filter = "";
+        if ((initDate != null || finalDate != null) && (typeFilter == null || typeFilter.equals(""))) {
+            typeFilter = "execute";
+        }
+        if (initDate == null && finalDate == null) {
+            typeFilter = "execute";
+        }
+        if (flagCard.equals("tracing_card") && !isToPerson) {
+            switch (typeFilter) {
+                case "date_assignment_form":
+                    if (initDate != null) {
+                        if (finalDate != null) {
+                            filter = " date_assignment_form BETWEEN '" + initDate + "' AND '" + finalDate + "'";
+                        } else {
+                            filter = " date_assignment_form BETWEEN '" + initDate + "' AND now()";
+                        }
+                    } else if (finalDate != null) {
+                        filter = " date_assignment_form < '" + finalDate + "'";
+                    } else {
+                        filter = "";
+                    }
+                    break;
+                case "date_competion_fomr":
+                    if (initDate != null) {
+                        if (finalDate != null) {
+                            filter = " date_competion_fomr BETWEEN '" + initDate + "' AND '" + finalDate + "'";
+                        } else {
+                            filter = " date_competion_fomr BETWEEN '" + initDate + "' AND now()";
+                        }
+                    } else if (finalDate != null) {
+                        filter = " date_competion_fomr < '" + finalDate + "'";
+                    } else {
+                        filter = "";
+                    }
+                    break;
+                case "date_sync_fomr":
+                    if (initDate != null) {
+                        if (finalDate != null) {
+                            filter = " date_sync_fomr BETWEEN '" + initDate + "' AND '" + finalDate + "'";
+                        } else {
+                            filter = " date_sync_fomr BETWEEN '" + initDate + "' AND now()";
+                        }
+                    } else if (finalDate != null) {
+                        filter = " date_sync_fomr < '" + finalDate + "'";
+                    } else {
+                        filter = "";
+                    }
+                    break;
+                case "date_tentative_fomr":
+                    if (initDate != null) {
+                        if (finalDate != null) {
+                            filter = " date_tentative_fomr BETWEEN '" + initDate + "' AND '" + finalDate + "'";
+                        } else {
+                            filter = " date_tentative_fomr BETWEEN '" + initDate + "' AND now()";
+                        }
+                    } else if (finalDate != null) {
+                        filter = " date_tentative_fomr < '" + finalDate + "'";
+                    } else {
+                        filter = "";
+                    }
+                    break;
+            }
+            ///////////////            
+        } else {
+            switch (typeFilter) {
+                case "execute":
+                    if (initDate != null) {
+                        if (finalDate != null) {
+                            filter = " execute_date_person BETWEEN '" + initDate + "' AND '" + finalDate + "'";
+                        } else {
+                            filter = " execute_date_person BETWEEN '" + initDate + "' AND now()";
+                        }
+                    } else if (finalDate != null) {
+                        filter = " execute_date_person < '" + finalDate + "'";
+                    } else {
+                        filter = "";
+                    }
+                    break;
+                case "sync":
+                    if (initDate != null) {
+                        if (finalDate != null) {
+                            filter = " sync_date_person BETWEEN '" + initDate + "' AND '" + finalDate + "'";
+                        } else {
+                            filter = " sync_date_person BETWEEN '" + initDate + "' AND now()";
+                        }
+                    } else if (finalDate != null) {
+                        filter = " sync_date_person < '" + finalDate + "'";
+                    } else {
+                        filter = "";
+                    }
+                    break;
+                case "final":
+                    if (initDate != null) {
+                        if (finalDate != null) {
+                            filter = " final_date_person BETWEEN '" + initDate + "' AND '" + finalDate + "'";
+                        } else {
+                            filter = " final_date_person BETWEEN '" + initDate + "' AND now()";
+                        }
+                    } else if (finalDate != null) {
+                        filter = " final_date_person < '" + finalDate + "'";
+                    } else {
+                        filter = "";
+                    }
+                    break;
+            }
+        }
+        return filter;
+    }

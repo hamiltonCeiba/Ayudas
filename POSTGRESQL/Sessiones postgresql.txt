@@ -1,0 +1,8 @@
+select * from pg_stat_activity;
+
+SELECT  * FROM pg_stat_activity WHERE datname='test_dev';
+--Para cerrar todas las conexiones de una base de datos de se llame test_dev
+SELECT pg_terminate_backend(procpid) FROM pg_stat_activity WHERE datname='test_dev';
+
+--Para cerrar una conexión específica.
+SELECT pg_terminate_backend(4456);

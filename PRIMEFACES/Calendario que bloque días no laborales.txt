@@ -1,0 +1,58 @@
+iv>
+                        <div class="row">
+
+                            <p:calendar id="popup" 
+                                        styleClass="dateTimeField" value="#{holidaysBean.holidaysDTO.ebcntHolidays.dateHoliday}"
+                                        pattern="MM/dd/yyyy" beforeShowDay="tuesdaysAndFridaysDisabled">
+
+                            </p:calendar>  
+                            <script type="text/javascript">
+                                var disabledDays = #{holidaysBean.holidaysDTO.listDaysHolidays};
+                                function tuesdaysAndFridaysDisabled(date)
+                                {
+                                     var m = date.getMonth(), d = date.getDate(), y = date.getFullYear();
+                                     if(disabledDays!==null){
+                                        for (i = 0; i &lt; disabledDays.length; i++) {
+                                            if ($.inArray((m + 1) + '-' + d + '-' + y, disabledDays) !== -1) {
+                                                return [false];
+                                            }
+                                        }
+                                    }
+                                        return [true];
+                                }
+                            </script>
+
+https://stackoverflow.com/questions/16559559/disable-specific-dates-on-pcalendar
+https://stackoverflow.com/questions/17270895/primefaces-calendar-disabling-specific-dates-using-el?noredirect=1&lq=1
+https://stackoverflow.com/questions/20114144/disable-specific-days-in-pcalendar?noredirect=1&lq=1
+https://stackoverflow.com/questions/50780639/disabling-specific-dates-in-pcalendar
+https://stackoverflow.com/questions/4338538/error-parsing-xhtml-the-content-of-elements-must-consist-of-well-formed-charact
+https://stackoverflow.com/questions/16559559/disable-specific-dates-on-pcalendar?noredirect=1&lq=1
+
+  public String getListDaysHolidays() {
+        if (listHolidays != null) {
+            listDaysHolidays = "";
+            int size = listHolidays.size();
+            for (int i = 0; i < size; i++) {
+                Calendar time = Calendar.getInstance();
+                Date date = listHolidays.get(i).getDateHoliday();
+                time.setTime(date);
+                int day = date.getDate();
+                int month = listHolidays.get(i).getDateHoliday().getMonth()+1;
+                int year = listHolidays.get(i).getDateHoliday().getYear() + 1900;
+                if (i == 0) {
+                    listDaysHolidays = "['" + month + "-" + day + "-" + year + "',";
+                }
+
+                if (i == size - 1)
+                {
+                    listDaysHolidays = listDaysHolidays.concat("'"+month + "-" + day + "-" + year + "']");
+                }else
+                {
+                    listDaysHolidays =listDaysHolidays.concat("'"+month+"-"+day+"-"+year+"',");
+                }
+            }
+            //listDaysHolidays = "['10-23-2018', '10-23-2018']";
+        }
+        return listDaysHolidays;
+    }

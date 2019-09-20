@@ -1,0 +1,4 @@
+INSERT INTO ipshorisoes.eccnt_cohort_card(id_type_card, initial_date, name_cohort_card)
+select id_type_card,now(),'Prueba'
+from ipshorisoes.eccnt_type_card 
+where flag_type_card like '%characteri%'

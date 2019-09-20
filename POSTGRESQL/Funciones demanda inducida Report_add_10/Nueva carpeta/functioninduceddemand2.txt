@@ -1,0 +1,44 @@
+CREATE OR REPLACE FUNCTION ipshorisoes.functioninduceddemand(
+	id_module_question integer[],
+	id_person_historic numeric,
+	schema_table text,
+	em_table_name text)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE
+cont int := 1;
+idReturn text;
+typeQuest text := '';
+idModQuest int :=0;
+resp text :='';
+begin
+    loop
+		RAISE NOTICE 'schema %',schema_table;
+		
+		EXECUTE 'select type_module_question from '|| schema_table ||'.eccnt_module_question'|| ' where id_module_question = ' ||id_module_question[cont] into typeQuest;
+		EXECUTE 'select id_module_question from '|| schema_table ||'.eccnt_module_question'|| ' where id_module_question = ' ||id_module_question[cont] into idModQuest;
+		SELECT 
+		case when
+		   typeQuest in('typeMul2','typeMul1','typeMul3','typeMul4')
+		   THEN
+		 (SELECT ipshorisoes.functioninduceddemandmulvec(idModQuest,schema_table||'.'||em_table_name ,id_person_historic) as q_ecr_module_pe_dt_173)   
+		 ELSE
+		 (SELECT ipshorisoes.functioninduceddemandboolvec(idModQuest,schema_table||'.'||em_table_name ,id_person_historic) as q_ecr_module_pe_dt_173)
+		 END 
+		 into resp;
+		 RAISE NOTICE 'respuesta antes %',resp;
+		 --idReturn := string_agg(resp,','); retorna No, no pero no concatenta el primer resultado
+		 --idReturn := idReturn ||', '|| resp; retorna null
+		 idReturn := concat(idReturn,', ',resp);
+		cont :=cont+1;
+    EXIT WHEN cont = array_length(id_module_question,1)+1;
+   END LOOP;
+  	RAISE NOTICE 'respuesta %',idReturn;
+    return idReturn;
+	
+end;
+$BODY$;

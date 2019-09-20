@@ -1,0 +1,42 @@
+-- FUNCTION: ipshorisoes.functioninduceddemandmulvec(integer[], text, numeric)
+
+-- DROP FUNCTION ipshorisoes.functioninduceddemandmulvec(integer[], text, numeric);
+
+CREATE OR REPLACE FUNCTION ipshorisoes.functioninduceddemandmulvec(
+	id_module_question integer,
+	tablename text,
+	id_person_historic numeric)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE
+idd text;
+idReturn text;
+begin
+		RAISE NOTICE '------------------ ';
+         RAISE NOTICE 'id_module_question %',id_module_question;
+		 RAISE NOTICE 'id_person_historic %',id_person_historic;
+		 RAISE NOTICE 'table_name %',tableName;
+        EXECUTE 'select q_'||cast(id_module_question as character varying)||' from '|| tableName||
+        ' where id_person_historic = '||id_person_historic  into idd;
+        RAISE NOTICE 'idd %',idd;
+         if (idd is null or idd in('','null') ) then 
+            idd:=0;
+            else idd:=idd;
+        end if;
+        
+        SELECT descrip_domain_value 
+        FROM ipshorisoes.ecr_domain_value 
+        WHERE ID_DOMAIN_VALUE = idd::int into idReturn;
+        --idReturn := concat(idReturn,', ', idReturn);
+        RAISE NOTICE 'result múltiple %',idReturn;  
+    
+    return idReturn;
+end;
+$BODY$;
+
+ALTER FUNCTION ipshorisoes.functioninduceddemandmulvec(integer, text, numeric)
+    OWNER TO postgres;

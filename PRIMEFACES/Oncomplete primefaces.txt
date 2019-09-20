@@ -1,0 +1,7 @@
+1- Se debe utilizar un p:remoteCommand que contenga lo que se desea actualizar
+2- En el p:ajax se pone el listener y el oncomplete referenciando al "name" del remote ejmp: 
+
+<p:remoteCommand name="reloadRel1" update=":form_dx:selectDiagnos_2"/>
+	<p:ajax event:blur oncomplete="reladRel1()" listener="{}"/>
+
+De esta manera se actualiza el ":form_dx:selectDiagnos_2" cuando termine la acción el ajax

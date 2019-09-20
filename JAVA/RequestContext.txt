@@ -1,0 +1,15 @@
+//actualizar
+RequestContext.getCurrentInstance().update("frmClinicHistory:tabView:" + dto.getModuleSelect().getIdModule() + ":panelTab");
+
+//cerrar dialog
+RequestContext.getCurrentInstanceRequestContext().execute("PF('wvDlgCashRegister').hide();");
+
+//ejecutar-Ocultar Dialog 
+ RequestContext.getCurrentInstance().execute("PF('wvDlgAdministrator').hide();");
+
+//Abrir un archivo 
+RequestContext.getCurrentInstance().execute("openFile('" + dto.getTypeReport() + "')");
+
+//mensajes
+Message.information(getMessages("msg_information"), getMessages("configuration_tracing_create_case_ok"));
+

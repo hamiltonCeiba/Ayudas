@@ -1,0 +1,62 @@
+CREATE OR REPLACE FUNCTION ipshorisoes.functioninduceddemand(
+	id_module_question integer[],
+	id_person_historic numeric,
+	schema_table text)
+    RETURNS text
+
+AS $BODY$
+DECLARE
+cont int := 1;
+idReturn text;
+typeQuest text := '';
+idModQuest int :=0;
+resp text :='';
+em_table_name text :='';
+
+begin
+schema_table = concat(schema_table,'.');
+    loop
+		RAISE NOTICE 'schema %',schema_table;
+		
+		EXECUTE 'select type_module_question from '|| schema_table ||'eccnt_module_question'|| ' where id_module_question = ' ||id_module_question[cont] into typeQuest;
+		EXECUTE 'select id_module_question from '|| schema_table ||'eccnt_module_question'|| ' where id_module_question = ' ||id_module_question[cont] into idModQuest;
+		RAISE NOTICE 'idModQuest: %',idModQuest;
+		if idModQuest is not null then
+			EXECUTE 'select table_name_module FROM ' || schema_table ||'eccnt_module_question ecmq	INNER JOIN ' || schema_table ||'eccnt_module em ON ecmq.id_module = em.id_module WHERE ecmq.id_module_question = '|| idModQuest into em_table_name;
+
+			RAISE NOTICE 'nueva tabla: %',schema_table;
+			if typeQuest in('typeMul2','typeMul1','typeMul3','typeMul4') THEN
+				EXECUTE 'SELECT '||schema_table||'functioninduceddemandmulvec('||idModQuest||','''||schema_table||em_table_name||''', '||id_person_historic||') as q_ecr_module_pe_dt_173' into resp;   
+			 ELSE
+				EXECUTE 'SELECT '||schema_table||'functioninduceddemandboolvec('||idModQuest||','''||schema_table||em_table_name||''','||id_person_historic||') as q_ecr_module_pe_dt_173' into resp;
+			END if;
+			 RAISE NOTICE 'respuesta antes %',resp;
+			 else
+			 resp :='';
+		 end if;
+		 idReturn := concat(idReturn,'|',resp);
+		cont :=cont+1;
+    EXIT WHEN cont = array_length(id_module_question,1)+1;
+   END LOOP;
+   idReturn := regexp_replace(idReturn, '\|', '');
+  	RAISE NOTICE 'respuesta %',idReturn;
+    return idReturn;
+	
+end;
+$BODY$
+LANGUAGE 'plpgsql';
+
+--select id_module_question from ipshorisoes.ec_induced_demand where id_person_historic = 32554
+--select * from ipshorisoes.eccnt_module_question 
+--id_person_historic
+--32554
+--32555
+--32556
+--id_induced_demand
+--44759
+--44760
+--44761
+---select * FROM ipshorisoes.eccnt_module_question ecmq
+	--INNER JOIN ipshorisoes.eccnt_module em ON ecmq.id_module = em.id_module
+	--WHERE ecmq.id_module_question = 44761
+--select 'select id_module_question from schema_table.eccnt_module_question where id_module_question = id_module_question[cont]'

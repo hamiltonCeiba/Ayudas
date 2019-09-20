@@ -1,0 +1,11 @@
+
+EscntUsers referentUser = ((LoginBean) AppTool.getManagedBean("loginBean")).getDto().getObjUser();
+
+        LoginBean bean = ((LoginBean) AppTool.getManagedBean("loginBean"));
+
+
+        METODO:
+            public static Object getManagedBean(String bean) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        return context.getApplication().evaluateExpressionGet(context, "#{"+bean+"}", Object.class);
+    }

@@ -1,0 +1,27 @@
+CREATE OR REPLACE FUNCTION ipshorisoes.functioninduceddemandbool(
+	id_module_question numeric,
+	tablename text,
+	id_person_historic numeric)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE
+idd text;
+
+begin
+	RAISE NOTICE 'id_module %',id_module_question;
+	RAISE NOTICE 'tabla %',tableName;
+	RAISE NOTICE 'id_person_historic %',id_person_historic;
+   
+	EXECUTE 'select q_'||cast(id_module_question as character varying)||' from '|| tableName||
+    ' where id_person_historic = '||id_person_historic  into idd;
+	 if (idd is null) then 
+	 	idd:=0;
+		else idd:=idd;
+	end if;
+	return idd;
+end;
+$BODY$;

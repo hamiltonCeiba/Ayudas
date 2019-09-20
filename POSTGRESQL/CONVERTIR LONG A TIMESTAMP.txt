@@ -1,0 +1,2 @@
+select to_timestamp("LONG A CONVERTIR"/ 1000)
+select to_timestamp(1553695200000/ 1000)

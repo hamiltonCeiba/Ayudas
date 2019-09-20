@@ -1,0 +1,77 @@
+CREATE OR REPLACE FUNCTION 
+ipshorisoes.functionInducedDemandMul(id_module_question numeric, tableName text, id_person_historic numeric) RETURNS int
+AS
+$BODY$
+DECLARE
+idd int;
+
+begin
+	RAISE NOTICE 'id_module %',id_module_question;
+	RAISE NOTICE 'tabla %',tableName;
+	RAISE NOTICE 'id_person_historic %',id_person_historic;
+   
+	EXECUTE 'select q_'||cast(id_module_question as character varying)||' from '|| tableName||
+    ' where id_person_historic = '||id_person_historic  into idd;
+	 if (idd is null) then 
+	 	idd:=0;
+		else idd:=idd;
+	end if;
+	return idd;
+end;
+$BODY$
+LANGUAGE 'plpgsql';
+
+-------------------------
+
+CREATE OR REPLACE FUNCTION 
+ipshorisoes.functionInducedDemandBool(id_module_question numeric, tableName text, id_person_historic numeric) 
+RETURNS text
+AS
+$BODY$
+DECLARE
+idd text;
+
+begin
+	RAISE NOTICE 'id_module %',id_module_question;
+	RAISE NOTICE 'tabla %',tableName;
+	RAISE NOTICE 'id_person_historic %',id_person_historic;
+   
+	EXECUTE 'select q_'||cast(id_module_question as character varying)||' from '|| tableName||
+    ' where id_person_historic = '||id_person_historic  into idd;
+	 if (idd is null) then 
+	 	idd:=0;
+		else idd:=idd;
+	end if;
+	return idd;
+end;
+$BODY$
+LANGUAGE 'plpgsql';
+---------------------------- corrección
+CREATE OR REPLACE FUNCTION ipshorisoes.functioninduceddemandmul(
+	id_module_question numeric,
+	tablename text,
+	id_person_historic numeric)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE
+idd text;
+
+begin
+	RAISE NOTICE 'id_module %',id_module_question;
+	RAISE NOTICE 'tabla %',tableName;
+	RAISE NOTICE 'id_person_historic %',id_person_historic;
+   
+	EXECUTE 'select q_'||cast(id_module_question as character varying)||' from '|| tableName||
+    ' where id_person_historic = '||id_person_historic  into idd;
+	RAISE NOTICE 'idd %',idd;
+	 if (idd is null or idd in('','null') ) then 
+	 	idd:=0;
+		else idd:=idd;
+	end if;
+	return idd::int;
+end;
+$BODY$;

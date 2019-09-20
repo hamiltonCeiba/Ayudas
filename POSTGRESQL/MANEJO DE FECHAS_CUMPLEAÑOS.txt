@@ -1,0 +1,21 @@
+SELECT age(eph.execute_date_person,epd. birthdate)as"calculado con fecha actual",
+(age(epd. birthdate))-(current_date-eph.execute_date_person)as" con fecha de ejecución",
+(current_date-eph.execute_date_person)as"resta de días" ,eph.*,epd.*
+FROM ipshorisoes.ecr_person_historic eph 
+INNER JOIN ipshorisoes.es_person_data epd ON eph.id_person_data = epd.id_person_data  
+WHERE eph.id_type_card = 29 AND date_part('year',age(epd. birthdate)) >= '90' 
+AND epd.id_administrator IN(1) group by eph.id_person_historic, eph.id_person_historic,epd.id_person_data  
+order by eph.id_person_historic;
+
+
+https://www.postgresql.org/docs/8.4/functions-datetime.html
+
+
+SELECT age(eph.execute_date_person,epd. birthdate)as"con fecha de ejecución",
+(age(epd. birthdate))as" con fecha ACTUAL",
+(current_date-eph.execute_date_person)as"resta de días" ,eph.*,epd.*
+FROM ipshorisoes.ecr_person_historic eph 
+INNER JOIN ipshorisoes.es_person_data epd ON eph.id_person_data = epd.id_person_data  
+WHERE eph.id_type_card = 29 AND date_part('year',age(eph.execute_date_person,epd. birthdate)) >= '90' 
+AND epd.id_administrator IN(1) group by eph.id_person_historic, eph.id_person_historic,epd.id_person_data  
+order by eph.id_person_historic;

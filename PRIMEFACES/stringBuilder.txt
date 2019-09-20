@@ -1,0 +1,28 @@
+
+
+//            String prueba = DaoUtil.getClientByUser();
+//            String[] ids = prueba.split(",");
+//            int[] numbersIds = new int[ids.length];
+//            for (int i = 0; i < ids.length; i++) {
+//                numbersIds[i] = Integer.parseInt(ids[i]);
+//            }
+//
+//            StringBuilder sqlString = new StringBuilder();
+//
+//            String query = "SELECT a.*, m.name_municipality, d.id_department, c.id_country"
+//                    + " FROM schema.es_administrator a"
+//                    + " INNER JOIN config.ecr_municipality m ON a.id_municipality_admin = m.id_municipality "
+//                    + "INNER JOIN config.ecr_department d ON m.id_department = d.id_department"
+//                    + " INNER JOIN config.ecr_country c ON d.id_country = c.id_country";
+//
+//            sqlString.append(query);
+//            sqlString.append(" WHERE a.id_administrator  IN(");
+//            for (int i : numbersIds) {
+//                sqlString.append(i).append(",");
+//            }
+//
+//            sqlString.append(");");
+            // String consulta = sqlString.toString().replace("schema", DaoUtil.getSchemaEnterprises()).replace(",)", ")");
+            //preparedStatement = connection.prepareStatement(consulta);
+            //preparedStatement.setString(1, DaoUtil.getClientByUser());
+            

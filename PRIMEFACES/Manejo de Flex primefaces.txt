@@ -1,0 +1,175 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:form id="form_filter_pe_dt" > 
+        <p:panel id="filter_pe_dt" styleClass="centerCustomTitleBar" header="Reporte estático Demanda inducida (412)"  >
+            <div class="p-grid">
+                <div class="p-col-12">
+                    <h:outputLabel value="Filtros: "/>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-4">
+                    <h:outputText value="Empresa"/>                
+                </div>
+                <div class="p-col-4">
+                    <h:outputText value="Tipo de informe"/>                
+                </div>
+                <div class="p-col-4">
+                    <h:outputText value="Formulario"/>                
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-4">
+                    <p:selectOneMenu id="id_enterprise" value="#{chReportDemandBean.dto.enterpriseSelected}"
+                                     disabled="#{!chReportDemandBean.dto.activeSelecEnterprise}"
+                                     required="true" requiredMessage="Seleccione empresa" filter="true"
+                                     converter="genericConverter"  label="Listado empresas"                                     
+                                     >
+                        <p:ajax process="@this" listener="#{chReportDemandBean.loadCard()}" update="one_menu_type_card,one_menu_countries_mcp"/>
+                        <f:selectItem itemLabel="seleccione " itemValue="${null}" />
+                        <f:selectItems value="#{chReportDemandBean.dto.listEnterprise}" var="enterprise"
+                                       itemValue="#{enterprise}" itemLabel="#{enterprise.business_name_enterprise}"/>
+                    </p:selectOneMenu>               
+                </div>
+                <div class="p-col-4">
+                    <p:selectOneMenu id="one_menu_type_format" 
+                                     requiredMessage="Debe Seleccionar un tipo de informe"
+                                     required="true"
+                                     value="#{chReportDemandBean.dto.typeFormat}" 
+                                     styleClass="displayOpcion"  
+                                     >
+                        <p:ajax process="@this"/>
+                        <f:selectItem itemLabel="seleccione " itemValue="${null}" />
+                        <f:selectItem itemLabel="Columnas Dinamicas " itemValue="${1}" />
+                        <f:selectItem itemLabel="Por filas " itemValue="${2}" />
+                    </p:selectOneMenu>                          
+                </div>
+                <div class="p-col-4">
+                    <p:selectOneMenu id="one_menu_type_card"  
+                                     value="#{chReportDemandBean.dto.typeCardSelected.idTypeCard}" 
+                                     styleClass="displayOpcion" 
+                                     required="true"
+                                     requiredMessage="Debe seleccionar un formulario"
+                                     style="width:250px">                        
+                        <p:ajax update="@this" process="@this" />
+                        <f:selectItem itemLabel="seleccione " itemValue="${null}" />
+                        <f:selectItems value="#{chReportDemandBean.dto.listTypeCard}" var="card" itemValue="#{card.idTypeCard}"  itemLabel="#{card.nameTypeCard}" />
+                    </p:selectOneMenu>                                 
+                </div>
+            </div>
+            <div class="p-grid">            
+                <div class="p-col-1">
+                    <h:outputText value="Fecha"/>
+                </div>
+                <div class="p-col-5">
+                    <p:selectOneMenu id="one_menu_type_date" 
+                                     value="#{chReportDemandBean.dto.dateTypeSelected}" 
+                                     required="true"
+                                     requiredMessage="Seleccione un tipo de fecha e ingrese como mínimo una fecha"
+                                     styleClass="displayOpcion" >
+                        <p:ajax update=" :reportDemand:tableData" 
+                                process="@this"/>
+                        <f:selectItem itemLabel="seleccione " itemValue="${null}" />
+                        <f:selectItem itemLabel="#{msg.msg_characterization_date}" itemValue="${1}" />
+                        <f:selectItem itemLabel="#{msg.msg_characterization_sync}" itemValue="${2}" />
+                        <f:selectItem itemLabel="#{msg.msg_characterization_finalization}" itemValue="${3}" />
+                    </p:selectOneMenu>                     
+                </div>
+                <div class="p-col-6">
+                    <h:outputText value="País/Departamento/Municipio"/>
+                </div>
+            </div>
+            <div class="p-grid">            
+                <div class="p-col-3">
+                    <p:calendar  styleClass="dateTimeField"
+                                 pattern="MM/dd/yyyy HH:mm:ss"
+                                 placeholder="Fecha inicial"
+                                 maxdate="#{chReportDemandBean.dto.dateMaxInducedDemand412}"
+                                 value="#{chReportDemandBean.dto.initialDate}" >
+                        <p:ajax event="dateSelect" 
+                                update="datefinal"
+                                />
+                    </p:calendar>
+                </div>
+                <div class="p-col-3">
+                    <p:calendar id="datefinal" styleClass="dateTimeField"
+                                pattern="MM/dd/yyyy HH:mm:ss"
+                                placeholder="Fecha final"
+                                value="#{chReportDemandBean.dto.finalDate}"
+                                mindate="#{chReportDemandBean.dto.initialDate}"
+                                maxdate="#{chReportDemandBean.dto.dateMaxInducedDemand412}"
+                                >
+                        <p:ajax event="dateSelect"
+                                />
+                    </p:calendar>
+                </div>
+                <div class="p-col-2">
+                    <p:selectCheckboxMenu id="one_menu_countries_mcp" style="width: 100%;height: 30px"
+                                     filter="true"
+                                     label="País"
+                                     converter="genericConverter"
+                                     value="#{chReportDemandBean.dto.listSelectedCountry}" 
+                                     styleClass="displayOpcion" >
+                        <p:ajax listener="#{chReportDemandBean.loadDepartments()}"
+                                update="one_menu_departments_mcp" 
+                                process="@this"/>
+                        <f:selectItems value="#{chReportDemandBean.dto.listCountries}" var="country" itemValue="#{country}"  itemLabel="#{country.name_country}" />
+                    </p:selectCheckboxMenu>
+                </div>
+                <div class="p-col-2">
+                    <p:selectCheckboxMenu id="one_menu_departments_mcp" style="width: 100%;height: 30px"
+                                     filter="true"
+                                     label="Departamento"
+                                     requiredMessage="#{msg.rep_act_general_country_empty_code_user}" 
+                                     value="#{chReportDemandBean.dto.listSelectedDepartment}" 
+                                     converter="genericConverter"
+                                     >
+                        <p:ajax listener="#{chReportDemandBean.loadMunicipaly()}" event="toggleSelect" update="one_menu_municipalities"/>
+                        <p:ajax listener="#{chReportDemandBean.loadMunicipaly()}" 
+                                update="one_menu_municipalities" 
+                                process="@this"/>
+                        <f:selectItems value="#{chReportDemandBean.dto.listDepartments}" var="department" itemValue="#{department}" itemLabel="#{department.name_department}"/>
+                    </p:selectCheckboxMenu>
+                </div>
+                <div class="p-col-2">
+                    <p:selectCheckboxMenu id="one_menu_municipalities" style="width: 100%;height: 30px"
+                                     filter="true"
+                                     requiredMessage="#{msg.rep_act_general_country_empty_code_user}" 
+                                     value="#{chReportDemandBean.dto.listSelectedMunicip}" 
+                                     label="Municipio"
+                                     converter="genericConverterGroup"
+                                     >
+                        <p:ajax listener="#{chReportDemandBean.cleanData()}" event="toggleSelect"/>
+                        <p:ajax listener="#{chReportDemandBean.cleanData()}"
+                                process="@this"/>
+                        <f:selectItems value="#{chReportDemandBean.dto.listMunicipalities}" var="municipality" itemValue="#{municipality}" itemLabel="#{municipality.label}"/>
+                    </p:selectCheckboxMenu>
+                </div>
+            </div>
+            <div class="p-grid p-justify-end">
+                <div class="p-col-1">     
+                    <div class="box">
+                        <p:commandButton id="btnClean" value="#{msg.msg_clean_button}"
+                                         class="btn btn-xs btn-primary space1RL" 
+                                         styleClass="customButtonAdd"
+                                         update="form_filter_pe_dt,reportDemand:panelReportDemand"
+                                         actionListener="#{chReportDemandBean.cleanFilters()}"  /> 
+                    </div>
+                </div>
+                <div class="p-col-1">     
+                    <div class="box">
+                        <p:commandButton id="btnSearch" value="#{msg.msg_filter_button}"
+                                         class="btn btn-xs btn-primary space1RL" 
+                                         styleClass="customButtonAdd"
+                                         process="@this,one_menu_type_card,form_filter_pe_dt"
+                                         update="reportDemand,one_menu_type_card,form_filter_pe_dt"
+                                         actionListener="#{chReportDemandBean.loadInfo()}"  /> 
+                    </div>
+                </div>                
+            </div>
+        </p:panel>
+    </h:form>
+</ui:composition>

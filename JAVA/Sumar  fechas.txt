@@ -1,0 +1,4 @@
+INSERT INTO 
+schema.ph_tracing_type_form
+( id_ph_tracing, id_type_form_tr, id_user_tr, date_assignment_form, date_completion_fomr, date_sync_fomr, date_tentative_fomr, id_phttf_serv) 
+VALUES (?, ?, ?, now(), ?, ?, now() + interval 'field days', ?);

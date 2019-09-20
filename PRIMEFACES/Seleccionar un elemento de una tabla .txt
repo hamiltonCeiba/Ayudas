@@ -1,0 +1,1 @@
+<f:setPropertyActionListener value="#{list}" target="#{escntRolBean.dto.objRolSelected}"/>

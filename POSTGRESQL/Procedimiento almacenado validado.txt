@@ -1,0 +1,43 @@
+CREATE OR REPLACE FUNCTION 
+ipshorisoes.functionPr(id_module_question numeric, tableName text, id_person_historic numeric) RETURNS numeric
+AS
+$BODY$
+DECLARE
+idd int;
+begin
+    EXECUTE 'select q_'||cast(id_module_question as character varying)||' from '|| tableName||
+    ' where id_person_historic = '||id_person_historic  into idd;
+	 if (idd is null) then 
+	 	idd:=0;
+		else idd:=idd;
+	end if;
+	return idd;
+end;
+$BODY$
+LANGUAGE 'plpgsql';
+--demand ecid ON e17.id_person_historic = ecid.id_person_historic
+
+select ipshorisoes.functionPr(302, 'ipshorisoes.ecr_module_pe_dt_17',17);
+
+
+
+---------------------- ejecución
+
+SELECT eph.*,epd.*,echlp.home,echlp.living_place  ,tb1000.q_9 ,(SELECT 
+ case when
+       ecmq.type_module_question in('typeMul2','typeMul1','typeMul3','typeMul4')
+       THEN
+(SELECT descrip_domain_value
+         FROM ipshorisoes.ecr_domain_value
+         WHERE ID_DOMAIN_VALUE = (
+			 SELECT * FROM ipshorisoes.functionPr(ecid.id_module_question,'ipshorisoes.ecr_module_pe_dt_17',ecid.id_person_historic)))
+		ELSE
+(SELECT * FROM ipshorisoes.functionPr(ecid.id_module_question,'ipshorisoes.ecr_module_pe_dt_17',ecid.id_person_historic))::text
+END
+FROM ipshorisoes.eccnt_module_question ecmq
+INNER JOIN ipshorisoes.eccnt_module em ON ecmq.id_module = em.id_module
+WHERE ecmq.id_module_question = ecid.id_module_question) FROM ipshorisoes.ecr_person_historic eph INNER JOIN ipshorisoes.es_person_data epd ON eph.id_person_data = epd.id_person_data INNER JOIN ipshorisoes.ec_home_living_place_per echlp ON echlp.id_person_historic = eph.id_person_historic   INNER JOIN ipshorisoes.ecr_module_charact_1 tb1000 ON eph.id_person_historic = tb1000.id_person_historic  FULL JOIN ipshorisoes.ec_induced_demand ecid ON ecid.id_person_historic = eph.id_person_historic WHERE eph.id_type_card = 1 AND (SELECT case when op.programs @> '{17}'::int[] then true else false end from (select conteo, id_person_historic,programs from  
+(SELECT id_person_historic, count(id_module)as conteo, array_agg(id_module)as programs
+from ipshorisoes.ec_induced_demand where id_person_historic = eph.id_person_historic
+group by id_person_historic)as p) as op) 
+		 and (case when ecid.id_module in(17) then true else false end) AND epd.id_administrator IN(1)  ;

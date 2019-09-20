@@ -1,0 +1,19 @@
+
+
+RequestContext.getCurrentInstance().execute("PF('wvDlgCashRegister').hide();");
+
+RequestContext.getCurrentInstance().execute("PF('wvDlgCashRegister').show();");
+
+
+#{tracingRegisterCaseBean.dto.personData.middleName} #{tracingRegisterCaseBean.dto.personData.lastName} #{tracingRegisterCaseBean.dto.personData.secondLastName}
+
+<div class="col-md-6 paddingRight30">
+                            <div class="row pull-left">
+                                <p:outputLabel  value="Nombre " />
+                            </div>
+                            <div class="row">
+                                <p:inputText class="form-control"
+                                             value="#{tracingRegisterCaseBean.dto.personData.firstName}  ">
+                                </p:inputText> 
+                            </div>
+                        </div>

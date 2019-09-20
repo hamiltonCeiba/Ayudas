@@ -1,0 +1,13 @@
+ rendered="#{ebcntMedicalSuppliesBean.ebcntMedicalSuppliesDTO.disable eq false}"
+ 
+
+ visible="#{clinicHistoryBean.clinicHistoryDTO.personData.idPersonData ne 0}"
+ 
+
+ itemLabel="#{item.code ne null ? item.getCodedesc() : item.description}"
+
+ visible="#{clinicHistoryBean.clinicHistoryDTO.personData.idPersonData ne 0}"
+
+ <p:outputPanel rendered="#{question.type ne 'ACPR' and question.type ne 'ACPRL' and question.type ne 'ACPRD'and question.type ne 'RISK'}" class="row pull-left">
+
+   <h:outputText value="#{(!question.text.contains('null'))?question.text:''}"  />

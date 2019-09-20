@@ -1,0 +1,38 @@
+
+//para excluir las columnas a exportar se coloca la etiqueta   
+exportable="false"
+
+
+ <p:dataTable  id="tableId"
+                                  rowKey="#{list.idUser}" 
+                                  value="#{escntUserBean.dto.lstUsers}" 
+                                  filteredValue="#{escntUserBean.dto.lstUsersFilter}"
+                                  widgetVar="usersTable"
+                                  var="list" 
+                                  emptyMessage="${msg.table_empty}"
+                                  rows="10"
+                                  paginator="true"
+                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                                  rowsPerPageTemplate="5,10,15"
+                                  paginatorPosition="bottom"
+                                  styleClass="customDataTable">
+
+
+
+	<f:facet name="{Exporters}">
+	                            <p:commandButton ajax="false" 
+	                                             icon="fa fa-file-excel-o" styleClass="customButtonExcel" 
+	                                             title="${msg.report_general_municipality_export_excel}" 
+	                                             style="margin-left: 10px;">                                 
+	                                <p:dataExporter type="xls" target="tableId" fileName="${msg.export_to_excel_users}" />
+	                            </p:commandButton>
+	                        </f:facet>
+
+
+	                        </p:dataTable>
+
+
+	                        
+
+
+	                        

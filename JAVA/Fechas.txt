@@ -1,0 +1,14 @@
+mostrar formato fecha 
+
+<p:column headerText="${msg.ch_execute_date}" 
+                              sortBy="#{personHistoric.idPchPersonHistoric}" 
+                              class="text-center">
+                        <h:outputText value="#{personHistoric.executeDataPch}" >
+                            <f:convertDateTime pattern="hh:mm a - (dd/MM/YYYY)" />
+                        </h:outputText>
+                    </p:column>
+
+
+
+
+sistemasdeinformacion@ipshorisoes.org
