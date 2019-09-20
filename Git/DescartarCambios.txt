@@ -1,0 +1,4 @@
+//descartar todos los cambios
+git reset --hard
+
+https://desarrolloweb.com/articulos/descartar-cambios-archivos-git.html

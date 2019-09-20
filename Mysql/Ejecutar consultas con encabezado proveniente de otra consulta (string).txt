@@ -1,0 +1,8 @@
+ SET @QUERY = CONCAT("SELECT ", (SELECT GROUP_CONCAT( COLUMN_NAME,' ' ) AS"nombre de columnas"
+FROM INFORMATION_SCHEMA.COLUMNS clm
+INNER JOIN gestiondocumental_dev.constructor cns ON clm.COLUMN_NAME = cns.cns_campoDestino
+WHERE TABLE_NAME = 'detalleSanitas' AND TABLE_SCHEMA = 'gestiondocumental_dev' AND cns.cns_tpl_id= 1)
+,"FROM gestiondocumental_dev.detalleSanitas");
+ PREPARE stmt1 FROM @QUERY;
+ EXECUTE stmt1;
+ DEALLOCATE PREPARE stmt1; 

@@ -1,0 +1,7 @@
+//convertir Json
+    const aux = JSON.stringify(tonelaje);
+    console.log(JSON.parse(aux));
+    console.log(JSON.stringify(tonelaje));
+console.log(JSON.stringify({tonelaje}));
+
+//
