@@ -1,0 +1,30 @@
+SELECT  						group_CONCAT(tzd.trd_std_id) idEstado,
+								group_CONCAT(sta.std_estado) estado
+								,cj.caj_cajaFisica  caja
+                        , ra.rdc_codBarras codigoBarras
+                        , DATE_FORMAT(cj.caj_created, '%d-%m-%Y') fechaImportacion
+                        , DATE_FORMAT(lt.lot_fechaRecepcion, '%d-%m-%Y') fechaRecepcion
+                        , dc.dcm_posicion orden
+                        , cj.caj_estado estadoCaja
+                        , lt.lot_preRadicado preRadicado
+                        , tt.ttm_nombre tramite
+                        , so.scr_nombre sucursalOrigen
+                        , tp.tpl_descripcion tipologia
+                        , ra.rdc_prefijo prefijo
+                        , ra.rdc_numeroDocumento nit
+                        , ra.rdc_formulario factura
+                        , dc.dcm_numeroImagenes cantidadImagenes
+                        , dc.dcm_id documento
+                        
+                        #, lt.lot_id
+                        FROM lote lt
+                        INNER JOIN radicacion ra ON(lt.lot_id = ra.rdc_lot_id)
+                        INNER JOIN tipologia tp ON(tp.tpl_id = lt.lot_tpl_id)
+                        INNER JOIN tipoTramite tt ON(tt.ttm_id = lt.lot_ttm_id)
+                        LEFT JOIN recepcion rc ON(rc.rcp_id = lt.lot_rcp_id)
+                        LEFT JOIN sucursalOrigen so ON(so.scr_id = rc.rcp_scr_id)
+                        INNER JOIN documento dc ON(dc.dcm_rdc_id = ra.rdc_id )
+                        INNER JOIN caja cj ON(cj.caj_id = dc.dcm_caj_id)
+                        left JOIN trazabilidadDocumento tzd ON(tzd.trd_dcm_id = dc.dcm_id)
+                        INNER JOIN estadoDocumento sta ON (tzd.trd_std_id = sta.std_id)
+                        GROUP BY dc.dcm_id

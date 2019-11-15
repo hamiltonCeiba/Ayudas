@@ -1,0 +1,7 @@
+1-Procesos que se están ejecutando en MySQL ejecutaremos:
+show processlist;
+
+2-ver las conexiones activas a la base de datos
+show status like 'Threads%';
+
+https://www.galisteocantero.com/ver-conexiones-abiertas-en-un-servidor-mysql/

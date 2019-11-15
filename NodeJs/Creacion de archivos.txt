@@ -1,0 +1,222 @@
+async function descomponerPath(path) {
+    let vectFecha = path.split('/');    
+    console.log(vectFecha)
+    if (Array.isArray(vectFecha)) {
+        try {
+            if (vectFecha.length > 0) {
+                let pathAnterior = '';
+                let pathInicial = '';
+                let archivoInexistente = false;
+                let imagenFtp = await conexionFpt();
+                if (imagenFtp) {
+                    for (var i = 0; i < vectFecha.length; i++) {
+                        if (!archivoInexistente) {
+                            if (i > 0) {
+                                pathInicial = vectFecha[i];
+                                let vect = await imagenFtp.obtenerArchivos(pathAnterior);
+                                if (!contieneArchivo(vect, pathInicial)) {
+                                    archivoInexistente = true;
+                                } else {
+                                    pathAnterior = pathAnterior + '/' + pathInicial;
+                                }
+                            } else {
+                                const imagenFtp = new ImagenFtp();
+                                pathInicial = vectFecha[i];
+                                let vect = await imagenFtp.obtenerArchivos(pathAnterior);
+                                if (!contieneArchivo(vect, pathInicial)) {
+                                    archivoInexistente = true;
+                                } else {
+                                    pathAnterior = pathInicial;
+                                }
+                            }
+                        } else {
+                            console.log('la carpeta ', pathInicial, 'no existe y debe crearse en: ', pathAnterior)
+                            await imagenFtp.crearArchivos(pathAnterior+'/'+pathInicial);
+                            if(i== 0){
+                                pathAnterior = pathInicial;
+                            }else{
+                                pathAnterior = pathAnterior + '/' + pathInicial;
+                            }                            
+                            pathInicial = vectFecha[i];
+                        }
+                    }
+                    if (archivoInexistente) {
+                        //En pathInicial estará la carpeta que no existe y en el pathAnterior la ruta en la cual debería crear el archivo de pathInicial
+                        console.log('la carpeta ', pathInicial, 'no existe y debe crearse en: ', pathAnterior)
+                    }
+                    //crear/copiar imagenes en la nueva ruta*****
+                    imagenFtp.desconectarFtp();
+                    return pathAnterior+'/'+pathInicial;
+                }
+            }
+        } catch (error) {
+            imagenFtp.desconectarFtp();
+            throw error;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////
+const ImagenFtp = require('./imagenFtp.class')
+const Consultas = require('./imagenFtpConsulta.class')
+var fs = require("fs")
+
+exports.obtenerRutaImagenFtp = async (path, lote, tipoRecobro) => {
+    /*const imagenFtp = await conexionFpt();
+    let vect = await imagenFtp.obtenerArchivos('D:/ARUS/PruebasFTP/2018'); para pruebas*/
+    //const imagenFtp = new ImagenFtp();
+    const consultas = new Consultas();
+    let radicadoBh = await consultas.obtenerRadicadoBh(lote);
+    path = path + '/' + obtenerCarpeta(tipoRecobro) + '/' + radicadoBh;
+    let resultado = await descomponerPath(path);
+    return resultado;
+}
+
+async function descomponerPath(path) {
+    let archivo = {direccion:'',archivos:[]}
+    try {
+        let imagenFtp = await conexionFpt();
+        if (imagenFtp) {
+            let vect = await imagenFtp.obtenerArchivos(path);
+            
+            if (vect.length === 0) {                
+                let crearTodoDirectorio = true;
+                imagenFtp.crearArchivos(path,crearTodoDirectorio);                
+            } 
+            //crear copiar imagenes en la nueva ruta*****
+            archivo.direccion = path;
+            archivo.archivos = vect;
+            imagenFtp.desconectarFtp();
+            return archivo;
+        }
+
+    } catch (error) {
+        imagenFtp.desconectarFtp();
+        throw error;
+    }
+}
+
+
+async function crearCarpeta(ruta) {
+    try {
+        return await fs.mkdirSync(ruta)
+    } catch (error) {
+        console.log(error)
+        switch (error.code) {
+            case 'EEXIST':
+                throw 'Se está intentando crear una carpeta que ya existe';
+            case 'EACCES':
+                throw 'No se cuentan con los permisos necesarios en el Sftp para crear archivos';
+            default:
+                throw error;
+        }
+    }
+}
+
+async function conexionFpt() {
+    try {
+        const imagenFtp = new ImagenFtp();
+        let consulta = new Consultas();
+        let datosConexion = await consulta.obtenerInformacionConexionFtp();
+        let conexion = await imagenFtp.conectarFtp(JSON.parse(datosConexion));
+        return imagenFtp;
+    } catch (error) {
+        console.log(error)
+        throw 'error al realizar la conexión con el sftp'
+    }
+}
+
+function contieneArchivo(listaArchivos, archivoBuscado) {
+    return listaArchivos.some(archivo => archivo.name === archivoBuscado);
+}
+
+function obtenerCarpeta(tipoRecobro) {
+    let resultado = '';
+    tipoRecobro = tipoRecobro.toUpperCase();
+    switch (tipoRecobro) {
+        case 'CTC':
+            resultado = 'MIPRESSREGULAR';
+            break;
+        case 'TUTELA':
+            resultado = 'MIPRESSTUTELA';
+            break;
+    }
+    return resultado;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////
+/*async function descomponerPath(path, lote) {
+    let archivo = { direccion: '' }
+    let imagenFtp;
+    try {
+        imagenFtp = await conexionFpt();
+        if (imagenFtp) {
+            //let vect = await imagenFtp.obtenerArchivos(path);
+
+            //if (vect.length === 0) {
+            let crearTodoDirectorio = true;
+            await imagenFtp.crearArchivos(path, crearTodoDirectorio);
+            //}
+            //Obtener las imágenes 
+            let consultas = new Consultas();
+            //let queryImagenes = await consultas.obtenerQueryImagenesPorLote(lote);            
+            //let imagenes = await consultas.ejecutarQuerySelect(queryImagenes);
+            //let imagenesInsertar = JSON.stringify(imagenes);
+            let numeroIntentos = 0;
+            //copiar las imágenes a la tabla 'envioRecobro' para que posteriormente el cron envíe las imagenes al sftp
+            //let imagenesinsertadas = await consultas.insertarImagenes(lote, imagenesInsertar, numeroIntentos, path);
+            let imagenesinsertadas = await consultas.insertarImagenes(lote, numeroIntentos, path);
+            if (imagenesinsertadas) {
+
+            } else {
+                throw 'La ruta fue creada y está lista, pero no fue posible copiar las imágenes para ser enviadas al Sftp'
+            }
+
+            archivo.direccion = path;
+            imagenFtp.desconectarFtp();
+            return archivo;
+        }
+
+    } catch (error) {
+        console.log(error)
+        if (imagenFtp) {
+            imagenFtp.desconectarFtp();
+        }
+        throw error;
+    }
+}*/
